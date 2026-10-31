@@ -1,0 +1,144 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  color: #111827;
+}
+
+.form-header {
+  height: 90px;
+  background: #5b8ff9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.form-header h1 {
+  background: #ffffff;
+  color: #5b8ff9;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 8px 50px;
+  font-size: 32px;
+  margin: 0;
+}
+
+.close {
+  position: absolute;
+  right: 30px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #222;
+  color: #5b8ff9;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  padding: 70px 20px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 730px;
+  background: #5b8ff9;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 12px 20px 18px;
+  border: 1px solid #222;
+  border-radius: 18px;
+}
+
+.field span {
+  color: #5b8ff9;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid #555;
+  outline-color: #5b8ff9;
+}
+
+.submit {
+  align-self: center;
+  min-width: 260px;
+  padding: 15px 25px;
+  background: white;
+  border: 1px solid #222;
+  border-radius: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: #e8f0ff;
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feedback {
+  margin: 0;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .form-header h1 {
+    font-size: 22px;
+    padding: 10px 20px;
+  }
+
+  .close {
+    right: 12px;
+  }
+
+  main {
+    padding: 35px 15px;
+  }
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .field span {
+    font-size: 18px;
+  }
+
+  .submit {
+    min-width: 200px;
+    font-size: 20px;
+  }
+}

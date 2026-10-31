@@ -1,0 +1,176 @@
+@font-face {
+  font-family: 'Roboto:Medium';
+  src: url('https://static.figma.com/font/Roboto_wdth_wght__3') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Roboto:SemiBold';
+  src: url('https://static.figma.com/font/Roboto_wdth_wght__3') format('woff2');
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Roboto:Bold';
+  src: url('https://static.figma.com/font/Roboto_wdth_wght__3') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+}
+
+:root {
+  --blue: #5c95ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: #fff;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.form-header {
+  position: relative;
+  display: grid;
+  height: 80px;
+  place-items: center;
+  background: var(--blue);
+}
+
+.form-header h1 {
+  display: grid;
+  width: min(320px, 45vw);
+  height: 50px;
+  margin: 0;
+  place-items: center;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--blue);
+  font-family: 'Roboto:Bold', Arial, sans-serif;
+  font-size: 40px;
+  font-variation-settings: 'wdth' 100;
+}
+
+.close {
+  position: absolute;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--blue);
+  cursor: pointer;
+  font-family: 'Roboto:Medium', Arial, sans-serif;
+  font-size: 40px;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1;
+}
+
+main {
+  display: grid;
+  min-height: calc(100vh - 80px);
+  place-items: center;
+  padding: 25px;
+}
+
+.form-card {
+  display: grid;
+  width: min(850px, 100%);
+  min-height: 500px;
+  align-content: start;
+  padding: 22px 39px;
+  border: 1px solid #000;
+  border-radius: 15px;
+  background: var(--blue);
+}
+
+.field {
+  display: grid;
+  height: 120px;
+  margin-bottom: 18px;
+  padding: 0 24px 14px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.field span {
+  align-self: center;
+  color: var(--blue);
+  font-family: 'Roboto:Medium', Arial, sans-serif;
+  font-size: 25px;
+  font-variation-settings: 'wdth' 100;
+}
+
+.field input {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #000;
+  background: #fff;
+  padding: 8px 12px;
+  font-size: 22px;
+}
+
+.forgot {
+  width: fit-content;
+  height: 25px;
+  padding: 0 7px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--blue);
+  cursor: pointer;
+  font-family: 'Roboto:Medium', Arial, sans-serif;
+  font-size: 20px;
+  font-variation-settings: 'wdth' 100;
+}
+
+.submit {
+  width: 350px;
+  max-width: 100%;
+  height: 80px;
+  justify-self: center;
+  margin-top: 39px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  font-family: 'Roboto:SemiBold', Arial, sans-serif;
+  font-size: 40px;
+  font-variation-settings: 'wdth' 100;
+}
+
+.feedback {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: #fff;
+  font-family: 'Roboto:Medium', Arial, sans-serif;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .close {
+    right: 15px;
+  }
+
+  main {
+    padding: 18px 12px;
+  }
+
+  .form-card {
+    padding: 20px 16px;
+  }
+}

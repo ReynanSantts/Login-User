@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TecLog — Login</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="form-header">
+      <h1>Login</h1>
+      <button class="close" type="button" aria-label="Fechar">X</button>
+    </header>
+
+    <main>
+      <form class="form-card" id="login-form">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="field">
+          <span>Senha</span>
+          <input
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+        <button class="forgot" type="button">Esqueci a senha</button>
+        <button class="submit" type="submit">Login</button>
+        <p class="feedback" aria-live="polite"></p>
+      </form>
+    </main>
+  </body>
+</html>

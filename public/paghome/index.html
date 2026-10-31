@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TecLog — Home</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./">TecLog</a>
+
+      <div class="user">
+        <img src="./assets/cb94a.png" alt="Foto de perfil" />
+        <span id="nome-header">Carregando...</span>
+      </div>
+
+      <button
+        class="menu-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="user-menu"
+      >
+        <img src="./assets/0d7bb.svg" alt="Abrir menu" />
+      </button>
+
+      <nav class="user-menu" id="user-menu" hidden>
+        <button type="button">Meu Perfil</button>
+        <button type="button">Configurações</button>
+        <button class="logout" type="button">Sair</button>
+      </nav>
+    </header>
+
+    <main class="dashboard">
+      <section class="welcome">
+        <div>
+          <h1>
+            Bem-vindo de volta,
+            <span id="nome-boas-vindas">Carregando...</span>! 👋
+          </h1>
+
+          <p>
+            Seu acesso foi realizado com sucesso. Explore a plataforma
+            e confira suas informações.
+          </p>
+        </div>
+      </section>
+
+      <section class="account" aria-label="Informações da conta">
+        <dl>
+          <div>
+            <dt>Nome:</dt>
+            <dd id="nome-usuario">Carregando...</dd>
+          </div>
+
+          <div>
+            <dt>Email:</dt>
+            <dd id="email-usuario">Carregando...</dd>
+          </div>
+
+          <div class="status">
+            <dt>Status:</dt>
+            <dd id="status-usuario">Verificando...</dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

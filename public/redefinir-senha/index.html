@@ -1,0 +1,37 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TecLog — Redefinir senha</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <header class="form-header">
+    <h1>Redefinir senha</h1>
+    <button class="close" type="button"
+      onclick="window.location.href='../paglogin/'">X</button>
+  </header>
+
+  <main>
+    <form class="form-card" id="redefinir-form" method="post">
+      <label class="field">
+        <span>Nova senha</span>
+        <input type="password" id="senha"
+          autocomplete="new-password" required>
+      </label>
+
+      <label class="field">
+        <span>Confirmar nova senha</span>
+        <input type="password" id="confirmarSenha"
+          autocomplete="new-password" required>
+      </label>
+
+      <button class="submit" type="submit">Salvar nova senha</button>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'Roboto:SemiBold';
+  src: url('https://static.figma.com/font/Roboto_wdth_wght__3') format('woff2');
+  font-style: normal;
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  min-width: 250px;
+  min-height: 100vh;
+  margin: 0;
+  place-items: center;
+  background: transparent;
+}
+
+.popup {
+  position: relative;
+  display: grid;
+  width: 250px;
+  min-height: 225px;
+  align-content: start;
+  gap: 15px;
+  padding: 58px 24px 30px;
+  border: 1px solid #000;
+  border-radius: 60px;
+  background: #5c95ff;
+}
+
+.popup button {
+  width: 200px;
+  height: 35px;
+  border: 1px solid #000;
+  border-radius: 40px;
+  background: #fff;
+  color: #5c95ff;
+  cursor: pointer;
+  font-family: 'Roboto:SemiBold', Arial, sans-serif;
+  font-size: 25px;
+  font-variation-settings: 'wdth' 100;
+  line-height: normal;
+}
+
+.popup .close {
+  position: absolute;
+  top: 12px;
+  right: 19px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.popup .logout {
+  color: red;
+}
+
+.message {
+  min-height: 14px;
+  margin: -8px 0 0;
+  color: #fff;
+  font-family: 'Roboto:SemiBold', Arial, sans-serif;
+  font-size: 12px;
+  text-align: center;
+}

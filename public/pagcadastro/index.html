@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TecLog — Cadastro</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="form-header">
+      <h1>Cadastro</h1>
+      <button class="close" type="button" aria-label="Fechar">X</button>
+    </header>
+
+    <main>
+      <form class="form-card" id="signup-form">
+        <label class="field">
+          <span>Nome</span>
+          <input type="text" name="name" autocomplete="name" required />
+        </label>
+        <label class="field">
+          <span>CPF</span>
+          <input type="text" name="cpf" inputmode="numeric" maxlength="14" required />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="field">
+          <span>Senha</span>
+          <input type="password" name="password" autocomplete="new-password" required />
+        </label>
+        <label class="field">
+          <span>Confirmar Senha</span>
+          <input type="password" name="confirmPassword" autocomplete="new-password" required />
+        </label>
+        <button class="submit" type="submit">Cadastrar</button>
+        <p class="feedback" aria-live="polite"></p>
+      </form>
+    </main>
+  </body>
+</html>

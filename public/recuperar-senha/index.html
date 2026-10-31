@@ -1,0 +1,31 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TecLog — Recuperar senha</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <header class="form-header">
+    <h1>Recuperar senha</h1>
+    <button class="close" type="button"
+      onclick="window.location.href='../paglogin/'">X</button>
+  </header>
+
+  <main>
+    <form class="form-card" id="recuperar-form">
+      <label class="field">
+        <span>Digite seu e-mail</span>
+        <input type="email" id="email"
+          autocomplete="email" required>
+      </label>
+
+      <button class="submit" type="submit">Enviar link</button>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </form>
+  </main>
+</body>
+</html>
