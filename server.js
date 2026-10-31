@@ -1,3 +1,4 @@
+
 const { conectar } = require("./config/database");
 const express = require("express");
 const session = require("express-session");
@@ -8,6 +9,12 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const producao = process.env.NODE_ENV === "production";
+
+// Permite reconhecer o HTTPS do Render
+if (producao) {
+  app.set("trust proxy", 1);
+}
 
 app.use(express.json());
 
@@ -20,12 +27,11 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      secure: false,
+      secure: producao,
       maxAge: 1000 * 60 * 60,
     },
-  }),
+  })
 );
-
 
 function protegerHome(req, res, next) {
   if (!req.session.usuarioId) {
@@ -42,7 +48,9 @@ app.use(express.static("public"));
 app.use("/api/usuarios", usuarioRoutes);
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "pagsobre", "index.html"));
+  res.sendFile(
+    path.join(__dirname, "public", "pagsobre", "index.html")
+  );
 });
 
 app.get("/index.html", (req, res) => {
@@ -60,6 +68,7 @@ async function iniciarServer() {
     });
   } catch (erro) {
     console.error("Falha ao iniciar:", erro.message);
+    process.exit(1);
   }
 }
 

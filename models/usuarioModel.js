@@ -1,173 +1,193 @@
-const { sql, conectar } = require("../config/database");
 
+const { pool } = require("../config/database");
+
+// CADASTRAR USUÁRIO
 async function cadastrarUsuario(nome, cpf, email, senha_hash) {
   try {
-    const resultado = await new sql.Request()
-      .input("nome", sql.VarChar(100), nome)
-      .input("cpf", sql.Char(11), cpf)
-      .input("email", sql.VarChar(150), email)
-      .input("senha_hash", sql.VarChar(255), senha_hash)
-      .query(
-        "INSERT INTO Usuarios (nome,cpf,email,senha_hash) OUTPUT INSERTED.id, INSERTED.nome, INSERTED.email VALUES (@nome,@cpf,@email,@senha_hash)",
-      );
+    const resultado = await pool.query(
+      `INSERT INTO usuarios (nome, cpf, email, senha_hash)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, nome, email`,
+      [nome, cpf, email, senha_hash]
+    );
 
-    return resultado.recordset[0];
+    return resultado.rows[0];
   } catch (erro) {
     console.error("Erro ao cadastrar Usuario:", erro.message);
     throw erro;
   }
 }
 
+// LISTAR USUÁRIOS
 async function listarUsuario() {
   try {
-    const resultado = await new sql.Request().query(
-      "SELECT id,nome FROM Usuarios",
+    const resultado = await pool.query(
+      "SELECT id, nome FROM usuarios"
     );
 
-    return resultado.recordset;
+    return resultado.rows;
   } catch (erro) {
-    console.error("Erro ao listar Usuarios", erro.message);
+    console.error("Erro ao listar Usuarios:", erro.message);
     throw erro;
   }
 }
 
+// BUSCAR USUÁRIO POR ID
 async function buscarUsuarioPorId(id) {
   try {
-    const resultado = await new sql.Request()
-      .input("id", sql.Int, id)
-      .query("select id,nome,email from Usuarios where id = @id");
+    const resultado = await pool.query(
+      "SELECT id, nome, email FROM usuarios WHERE id = $1",
+      [id]
+    );
 
-    return resultado.recordset[0];
+    return resultado.rows[0];
   } catch (erro) {
-    console.error("Erro ao buscar Usuario por ID", erro.message);
+    console.error("Erro ao buscar Usuario por ID:", erro.message);
     throw erro;
   }
 }
 
+// BUSCAR USUÁRIO POR E-MAIL
 async function buscarUsuarioPorEmail(email) {
   try {
-    const resultado = await new sql.Request()
-      .input("email", sql.VarChar(150), email)
-      .query(
-        "select id,nome,email,senha_hash from Usuarios where email = @email",
-      );
+    const resultado = await pool.query(
+      `SELECT id, nome, email, senha_hash
+       FROM usuarios
+       WHERE email = $1`,
+      [email]
+    );
 
-    return resultado.recordset[0];
+    return resultado.rows[0];
   } catch (erro) {
-    console.error("Erro ao buscar Usuario por Email", erro.message);
+    console.error("Erro ao buscar Usuario por Email:", erro.message);
     throw erro;
   }
 }
 
+// VERIFICAR E-MAIL EXISTENTE
 async function verificarEmailExistente(email) {
   try {
-    const resultado = await new sql.Request()
-      .input("email", sql.VarChar(150), email.trim())
-      .query("SELECT id FROM Usuarios WHERE email = @email");
+    const resultado = await pool.query(
+      "SELECT id FROM usuarios WHERE email = $1",
+      [email.trim()]
+    );
 
-    return resultado.recordset.length > 0;
+    return resultado.rows.length > 0;
   } catch (erro) {
     console.error("Erro ao verificar e-mail:", erro.message);
     throw erro;
   }
 }
 
+// VERIFICAR CPF EXISTENTE
 async function verificarCpfExistente(cpf) {
   try {
-    const resultado = await new sql.Request()
-      .input("cpf", sql.Char(11), cpf.trim())
-      .query("SELECT id FROM Usuarios WHERE cpf = @cpf");
+    const resultado = await pool.query(
+      "SELECT id FROM usuarios WHERE cpf = $1",
+      [cpf.trim()]
+    );
 
-    return resultado.recordset.length > 0;
+    return resultado.rows.length > 0;
   } catch (erro) {
     console.error("Erro ao verificar CPF:", erro.message);
     throw erro;
   }
 }
 
+// SALVAR TOKEN DE RECUPERAÇÃO
 async function salvarTokenRecuperacao(usuarioId, tokenHash, expiraEm) {
   try {
-    const resultado = await new sql.Request()
-      .input("usuarioId", sql.Int, usuarioId)
-      .input("tokenHash", sql.Char(64), tokenHash)
-      .input("expiraEm", sql.DateTime2, expiraEm).query(`
-                INSERT INTO RecuperacaoSenha
-                    (usuario_id, token_hash, expira_em)
-                VALUES
-                    (@usuarioId, @tokenHash, @expiraEm)
-            `);
+    const resultado = await pool.query(
+      `INSERT INTO recuperacaosenha
+       (usuario_id, token_hash, expira_em)
+       VALUES ($1, $2, $3)`,
+      [usuarioId, tokenHash, expiraEm]
+    );
 
-    return resultado.rowsAffected[0];
+    return resultado.rowCount;
   } catch (erro) {
     console.error("Erro ao salvar token:", erro.message);
     throw erro;
   }
 }
 
+// BUSCAR TOKEN DE RECUPERAÇÃO
 async function buscarTokenRecuperacao(tokenHash) {
   try {
-    const resultado = await new sql.Request().input(
-      "tokenHash",
-      sql.Char(64),
-      tokenHash,
-    ).query(`
-        SELECT id, usuario_id, expira_em
-        FROM RecuperacaoSenha
-        WHERE token_hash = @tokenHash
-          AND utilizado = 0
-          AND expira_em > SYSUTCDATETIME()
-      `);
+    const resultado = await pool.query(
+      `SELECT id, usuario_id, expira_em
+       FROM recuperacaosenha
+       WHERE token_hash = $1
+         AND utilizado = FALSE
+         AND expira_em > NOW()`,
+      [tokenHash]
+    );
 
-    return resultado.recordset[0];
+    return resultado.rows[0];
   } catch (erro) {
     console.error("Erro ao buscar token:", erro.message);
     throw erro;
   }
 }
 
+// ATUALIZAR SENHA UTILIZANDO TOKEN
 async function atualizarSenhaPorToken(tokenHash, novaSenhaHash) {
+  const cliente = await pool.connect();
+
   try {
-    const resultado = await new sql.Request()
-      .input("tokenHash", sql.Char(64), tokenHash)
-      .input("novaSenhaHash", sql.VarChar(255), novaSenhaHash).query(`
-       SET XACT_ABORT ON
+    await cliente.query("BEGIN");
 
-       BEGIN TRANSACTION
+    const resultadoToken = await cliente.query(
+      `SELECT usuario_id
+       FROM recuperacaosenha
+       WHERE token_hash = $1
+         AND utilizado = FALSE
+         AND expira_em > NOW()
+       FOR UPDATE`,
+      [tokenHash]
+    );
 
-       DECLARE @usuarioId INT
+    if (resultadoToken.rows.length === 0) {
+      await cliente.query("ROLLBACK");
+      return false;
+    }
 
-       SELECT @usuarioId = usuario_id
-       FROM RecuperacaoSenha WITH (UPDLOCK, HOLDLOCK)
-       WHERE token_hash = @tokenHash
-       AND utilizado = 0
-       AND expira_em > SYSUTCDATETIME()
+    const usuarioId = resultadoToken.rows[0].usuario_id;
 
-      IF @usuarioId IS NULL
-      BEGIN
-      ROLLBACK TRANSACTION
-      SELECT CAST(0 AS BIT) AS sucesso
-      END
-      ELSE
-      BEGIN
-      UPDATE Usuarios
-      SET senha_hash = @novaSenhaHash
-      WHERE id = @usuarioId
+    const resultadoSenha = await cliente.query(
+      `UPDATE usuarios
+       SET senha_hash = $1
+       WHERE id = $2`,
+      [novaSenhaHash, usuarioId]
+    );
 
-      UPDATE RecuperacaoSenha
-      set utilizado = 1
-      WHERE usuario_id = @usuarioId
-      AND utilizado = 0
+    if (resultadoSenha.rowCount !== 1) {
+      await cliente.query("ROLLBACK");
+      return false;
+    }
 
-      COMMIT TRANSACTION
+    await cliente.query(
+      `UPDATE recuperacaosenha
+       SET utilizado = TRUE
+       WHERE usuario_id = $1
+         AND utilizado = FALSE`,
+      [usuarioId]
+    );
 
-      SELECT CAST(1 AS BIT) AS sucesso
-      END
-      `);
+    await cliente.query("COMMIT");
 
-    return resultado.recordset[0].sucesso === true;
+    return true;
   } catch (erro) {
+    try {
+      await cliente.query("ROLLBACK");
+    } catch (erroRollback) {
+      console.error("Erro ao reverter transação:", erroRollback.message);
+    }
+
     console.error("Erro ao atualizar senha:", erro.message);
     throw erro;
+  } finally {
+    cliente.release();
   }
 }
 

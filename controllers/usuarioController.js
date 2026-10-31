@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const transporter = require("../config/email");
+const { enviarEmail } = require("../config/email");
 const {
   listarUsuario,
   buscarUsuarioPorId,
@@ -299,10 +299,14 @@ async function solicitarRecuperacao(req, res) {
 
     await salvarTokenRecuperacao(usuario.id, tokenHash, expiraEm);
 
-    const link = `http://localhost:3000/redefinir-senha/?token=${token}`;
+    const baseUrl = (process.env.APP_URL || "http://localhost:3000").replace(
+      /\/$/,
+      "",
+    );
 
-    await transporter.sendMail({
-      from: `"Teclog" <${process.env.EMAIL_USER}>`,
+    const link = `${baseUrl}/redefinir-senha/?token=${token}`;
+
+    await enviarEmail({
       to: usuario.email,
       subject: "Recuperação de senha - TecLog",
       text: `Olá! Para redefinir sua senha, acesse o link abaixo:

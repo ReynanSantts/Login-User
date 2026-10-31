@@ -1,13 +1,32 @@
-const nodemailer = require("nodemailer");
+require("dotenv").config();
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD
-    }
-});
+async function enviarEmail({ to, subject, text }) {
+  const resposta = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": process.env.BREVO_API_KEY
+    },
+    body: JSON.stringify({
+      sender: {
+        name: "TecLog",
+        email: process.env.EMAIL_USER
+      },
+      to: [{ email: to }],
+      subject,
+      textContent: text
+    })
+  });
 
-module.exports = transporter;
+  const resultado = await resposta.json();
+
+  if (!resposta.ok) {
+    throw new Error(
+      resultado.message || "Erro ao enviar e-mail pelo Brevo"
+    );
+  }
+
+  return resultado;
+}
+
+module.exports = { enviarEmail };

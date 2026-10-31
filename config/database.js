@@ -1,26 +1,23 @@
-const sql = require('mssql/msnodesqlv8')
-require('dotenv').config()
+const { Pool } = require("pg");
+require("dotenv").config();
 
-const config = {
-    server: process.env.DB_SERVER,
-    database: process.env.DB_DATABASE,
-    driver: 'ODBC Driver 18 for SQL Server',
-    options: {
-        trustedConnection: true,
-        trustServerCertificate: true
-    }
-}
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 async function conectar() {
-    try{
-        const conexao = await sql.connect(config)
-        console.log('Conectado ao SQL Server')
-        return conexao
-    }
-    catch(erro){
-        console.error('Erro ao conectar', erro.message)
-        throw erro
-    }
+  try {
+    const conexao = await pool.connect();
+    console.log("Conectado ao PostgreSQL!");
+    conexao.release();
+    return pool;
+  } catch (erro) {
+    console.error("Erro ao conectar:", erro.message);
+    throw erro;
+  }
 }
 
-module.exports = {conectar, sql}
+module.exports = { conectar, pool };
